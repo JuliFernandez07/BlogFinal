@@ -3,6 +3,9 @@ from AppBlog.forms import cargar_receta
 
 from AppBlog.models import receta
 
+def inicio(request):
+  return render(request, 'Inicio.html')
+
 def fulano(request):
     return render(request, "Inicio.html")
 

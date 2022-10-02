@@ -2,12 +2,13 @@ from django.contrib import admin
 from django.urls import path
 from . import views
 
-from AppBlog.views import fulano
+from AppBlog.views import *
 
 urlpatterns = [
     
     path("", views.fulano),
-    path("cargarReceta/", views.cargarReceta),
-    path("verReceta/", views.verReceta),
+    path("Home/", inicio, name="Home"),
+    path("cargarReceta/", cargarReceta, name="cargarReceta"),
+    path("verReceta/", verReceta, name="verReceta"),
 ]
     
