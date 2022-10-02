@@ -6,5 +6,8 @@ from AppBlog.views import fulano
 
 urlpatterns = [
     
-    path("", views.fulano)
+    path("", views.fulano),
+    path("cargarReceta/", views.cargarReceta),
+    path("verReceta/", views.verReceta),
 ]
+    

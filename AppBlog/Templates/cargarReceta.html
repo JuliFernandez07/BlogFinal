@@ -1,0 +1,14 @@
+{% extends "padre.html" %}
+{% load static %}
+
+{% block cargarReceta %}
+
+<form action="" method="POST"> {% csrf_token %}
+    <table>{{ cargar_receta_form.as_table }}</table>
+
+    <input type="submit" value="Enviar">
+
+
+    </form>
+{% endblock %}
+
