@@ -1,41 +1,54 @@
 from django.shortcuts import render
 from AppBlog.forms import cargar_receta
-
 from AppBlog.models import receta
+import datetime
+
+FECHA_ACTUAL = datetime.datetime.now()
 
 def inicio(request):
-  return render(request, 'Inicio.html')
 
-def fulano(request):
-    return render(request, "Inicio.html")
+  if request.method == 'GET':
+    todasLasRecetas = list(receta.objects.all())[::-1]
+
+  contexto = {'todasLasRecetas': todasLasRecetas}
+
+  return render(request, "Inicio.html", contexto)
+
 
 def cargarReceta(request):
-    if request.method == 'POST':
-        cargar_receta_form = cargar_receta(request.POST)
-        print(cargar_receta_form)
-        if cargar_receta_form.is_valid:
-            cargar_receta_cleaned = cargar_receta_form.cleaned_data
+  if request.method == 'POST':
 
-            nueva_receta = receta(
-                fecha = "2022-10-10",
-                nombre_receta = cargar_receta_cleaned["nombre_receta"],
-                imagen = cargar_receta_cleaned["imagen"],
-                receta = cargar_receta_cleaned["receta"],
-                autor = "Juli"
-            )
+    cargar_receta_form = cargar_receta(request.POST)
 
-            nueva_receta.save()
+    if cargar_receta_form.is_valid:
+      print(cargar_receta_form)
+      cargar_receta_cleaned = cargar_receta_form.cleaned_data
 
-    else:
-        cargar_receta_form = cargar_receta()
+      nueva_receta = receta(
+        fecha = f"{FECHA_ACTUAL.year}-{FECHA_ACTUAL.month}-{FECHA_ACTUAL.day}",
+        nombre_receta = cargar_receta_cleaned["nombre_receta"],
+        imagen = cargar_receta_cleaned["imagen"],
+        receta = cargar_receta_cleaned["receta"],
+        autor = "Juli"
+      )
 
-    contexto = {"cargar_receta_form": cargar_receta_form}
+      nueva_receta.save()
+      recetaCargada = True
+
+  else:
+    cargar_receta_form = cargar_receta()
+    recetaCargada = False
+
+  contexto = {"cargarRecetaForm": cargar_receta_form, "recetaCargada": recetaCargada}
+
+  return render (request, "cargarReceta.html", contexto)
 
 
-    return render (request, "cargarReceta.html", contexto)
+def verReceta(request, receta_id):
+  verReceta = receta.objects.get(id=receta_id)
+  contexto = {"verReceta": verReceta}
 
-def verReceta(request):
-    return render(request, "verReceta.html")
+  return render(request, "verReceta.html", contexto)
 
 """
 def loadInstruments(request):

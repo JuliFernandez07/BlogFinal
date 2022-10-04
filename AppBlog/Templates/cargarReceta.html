@@ -1,14 +1,24 @@
 {% extends "padre.html" %}
 {% load static %}
-
 {% block cargarReceta %}
 
-<form action="" method="POST"> {% csrf_token %}
-    <table>{{ cargar_receta_form.as_table }}</table>
-
+{% if recetaCargada == False %}
+<form action="{% url 'cargarReceta' %}" method="POST">
+    {% csrf_token %}
+    <table>{{ cargarRecetaForm.as_table }}</table>
     <input type="submit" value="Enviar">
+</form>
+{% endif %}
 
+{% if recetaCargada == True %}
+<h2>Receta cargada con exito!!!</h2>
+<form action="{% url 'Home' %}" method="GET">
+    <input type="submit" value="Regresar a Home.">
+</form>
 
-    </form>
+<form action="{% url 'cargarReceta' %}" method="GET">
+    <input type="submit" value="Cargar otra receta.">
+</form>
+{% endif %}
+
 {% endblock %}
-

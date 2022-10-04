@@ -1,9 +1,21 @@
 {% extends "padre.html" %}
 {% load static %}
-
 {% block verReceta %}
 
-<h1>Ver Receta</h1>
-
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="Ver Receta" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>Ver Receta</h1>
+    <p>{{ verReceta.nombre_receta }}</p>
+    <p>{{ verReceta.descripcion_receta }}</p>
+    <p>{{ verReceta.receta }}</p>
+</body>
+</html>
 
 {% endblock %}
