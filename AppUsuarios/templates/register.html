@@ -12,13 +12,18 @@
 </head>
 
 <body>
-
+    {% if registerOK == False %}
     <form action="" method="POST">
         {% csrf_token %}
         {{form.as_p}}
         <button type="submit"> Registrarse</button>
     </form>
-    
+    {% endif %}
+
+    {% if registerOK == True %}
+    <h1>{{ mensaje }}</h1>
+    {% endif %}
+
 </body>
 
 </html>

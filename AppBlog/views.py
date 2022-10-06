@@ -2,8 +2,15 @@ from django.shortcuts import render
 from AppBlog.forms import cargar_receta
 from AppBlog.models import receta
 import datetime
+from django.contrib.auth.decorators import login_required
+
+#Decorador por defecto
+from django.contrib.auth.decorators import login_required
+
 
 FECHA_ACTUAL = datetime.datetime.now()
+
+
 
 def inicio(request):
 
@@ -15,6 +22,7 @@ def inicio(request):
   return render(request, "Inicio.html", contexto)
 
 
+@login_required
 def cargarReceta(request):
   if request.method == 'POST':
 
@@ -43,7 +51,7 @@ def cargarReceta(request):
 
   return render (request, "cargarReceta.html", contexto)
 
-
+@login_required
 def verReceta(request, receta_id):
   verReceta = receta.objects.get(id=receta_id)
   contexto = {"verReceta": verReceta}

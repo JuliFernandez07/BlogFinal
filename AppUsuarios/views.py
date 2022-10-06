@@ -1,5 +1,9 @@
 from django.shortcuts import render
 from AppUsuarios.forms import *
+from AppUsuarios.models import *
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth import login, logout, authenticate
+from django.contrib.auth.forms import AuthenticationForm
 
 # Create your views here.
 def register(request):
@@ -11,45 +15,56 @@ def register(request):
 
             username = form.cleaned_data['username']
             form.save()
-
-            return render(request,"inicioRegister.html" ,  {"mensaje":"Usuario Creado :)"})
+            registerOK = True
+            contexto = {"mensaje": "Usuario Creado :)", "registerOK": registerOK}
 
     else:
         #form = UserCreationForm()       
-        form = RegisterForm()     
+        form = RegisterForm()
+        registerOK = False
+        contexto = {"form": form, "registerOK": registerOK }
 
-    return render(request,"register.html" ,  {"form": form})
+    return render(request, "register.html", contexto)
 
 
-
-def logout(request):
-
-    # logout(request)
-    messages.info(request, "Saliste sin problemas")
-
-    return redirect("inicio")
-     
-
-def login(request):
+def login_request(request):
     if request.method == "POST":
         form = AuthenticationForm(request, data = request.POST)
 
         if form.is_valid():
             usuario = form.cleaned_data.get('username')
-            contra = form.cleaned_data.get('password')
-            user = authenticate(username=usuario, password=contra)
-    
+            password = form.cleaned_data.get('password')
+            user = authenticate(username=usuario, password=password)
+
             if user is not None:
                 login(request, user)
-                
-                return render(request,"AppUsuarios/inicio.html",  {"mensaje":f"Bienvenido {usuario}"} )
+                loginOK = True
+                contexto = {"mensaje": f"Bienvenido {usuario}.", "loginOK": loginOK}
+
+                return render(request,"login.html", contexto)
 
             else:
-                return render(request,"AppUsuarios/inicio.html", {"mensaje":"Error, datos incorrectos"} )
+                loginOK = False
+                contexto = {"mensaje": "Error, formulario erroneo.", "loginOK": loginOK}
+
+                return render(request,"login.html", contexto)
 
         else:
-            return render(request,"AppUsuarios/inicio.html" ,  {"mensaje":"Error, formulario erroneo"})
+            loginOK = False
+            contexto = {"mensaje": "Error, verifique usuario y/o contraseña.", "loginOK": loginOK}
+
+            return render(request,"login.html" , contexto)
 
     form = AuthenticationForm()
+    loginOK = False
 
-    return render(request,"AppUsuarios/login.html", {'form':form})
+    contexto = {"form": form, "loginOK": loginOK}
+
+    return render(request,"login.html" , contexto)
+
+
+def logout_request(request):
+    logout(request)
+    messages.info(request, "Saliste sin problemas")
+
+    return redirect("inicio")
