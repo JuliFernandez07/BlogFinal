@@ -1,5 +1,5 @@
 import email
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from AppUsuarios.forms import *
 from AppUsuarios.models import *
 from django.contrib.auth.decorators import login_required
@@ -11,13 +11,18 @@ def register(request):
     if request.method == 'POST':
 
         form = RegisterForm(request.POST)
+        print(form)
         
         if form.is_valid():
-
-            username = form.cleaned_data['username']
+            print("Ingrese al primer form.is_valid")
+            # username = form.cleaned_data['username']
             form.save()
             registerOK = True
             contexto = {"mensaje": "Usuario Creado :)", "registerOK": registerOK}
+        else:
+            print("Ingrese al ELSE del IF form.is_valid")
+            registerOK = False
+            contexto = {"mensaje": "Error en el formulario", "registerOK": registerOK}
 
     else:
         #form = UserCreationForm()       
@@ -26,6 +31,7 @@ def register(request):
         contexto = {"form": form, "registerOK": registerOK }
 
     return render(request, "register.html", contexto)
+
 
 
 def login_request(request):
@@ -40,9 +46,8 @@ def login_request(request):
             if user is not None:
                 login(request, user)
                 loginOK = True
-                contexto = {"mensaje": f"Bienvenido {usuario}.", "loginOK": loginOK, "user": user.username}
 
-                return render(request,"login.html", contexto)
+                return redirect("Home")
 
             else:
                 loginOK = False
@@ -69,27 +74,30 @@ def logout_request(request):
     logout(request)
     messages.info(request, "Saliste sin problemas")
 
-    return redirect("inicio")
+    return redirect("Home")
 
 @login_required
 def editar_usuario(request):
 
     usuario = request.user
 
-    if request.method == "POST":
-        mi_formulario = edicionUsuarioForm(request.POST)
+    for item in dir(usuario):
+        print(item)
+    # print(usuario.set_password("passwordnueva"))
 
-        if mi_formulario.is_valid:
-            print(mi_formulario)
+    if request.method == "POST":
+
+        mi_formulario = edicionUsuarioForm(request.POST)
+        print(mi_formulario)
+
+        if mi_formulario.is_valid():
 
             info = mi_formulario.cleaned_data
+            print(info)
 
             usuario.email = info["email"]
             usuario.password1 = info["password1"]
             usuario.password2 = info["password2"]
-           
-            
-
             usuario.save()
 
             return render(request, "Inicio.html")

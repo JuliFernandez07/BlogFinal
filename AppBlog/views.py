@@ -3,36 +3,31 @@ from AppBlog.forms import cargar_receta
 from AppBlog.models import receta
 import datetime
 
-
-
 #Decorador por defecto
 from django.contrib.auth.decorators import login_required
-
 from AppUsuarios.models import avatar
-
 
 FECHA_ACTUAL = datetime.datetime.now()
 
 
-
 def inicio(request):
   
-  imagen_avatar = avatar.objects.filter(user=request.user.id)
-  
+  imagen_avatar = list(avatar.objects.filter(user=request.user.id))
+
   if request.method == 'GET':
     todasLasRecetas = list(receta.objects.all())[::-1]
-    
-    
-    contexto = {'todasLasRecetas': todasLasRecetas, "imagen":imagen_avatar[0].imagen.url} # ------->Cargar la imagen rompe el template 
+
+  if imagen_avatar != []:
+    contexto = {'todasLasRecetas': todasLasRecetas, "imagen":imagen_avatar[0].imagen.url } # ------->Cargar la imagen rompe el template
+  else:
+    contexto = {'todasLasRecetas': todasLasRecetas } # ------->Cargar la imagen rompe el template
 
   return render(request, "Inicio.html", contexto)
 
 
 @login_required
 def cargarReceta(request):
-
-  
-
+ 
   if request.method == 'POST':
 
     cargar_receta_form = cargar_receta(request.POST)
@@ -63,9 +58,13 @@ def cargarReceta(request):
 
 # @login_required
 def verReceta(request, receta_id):
-  imagen_avatar = avatar.objects.filter(user=request.user.id)
+  imagen_avatar = list(avatar.objects.filter(user=request.user.id))
   verReceta = receta.objects.get(id=receta_id)
-  contexto = {"verReceta": verReceta,} # "imagen":imagen_avatar[0].imagen.url}  ------->#Cargar la imagen rompe el template
+
+  if imagen_avatar != []:
+    contexto = {"verReceta": verReceta, "imagen":imagen_avatar[0].imagen.url}  #-------> Cargar la imagen rompe el template
+  else:
+    contexto = {"verReceta": verReceta}
 
   return render(request, "verReceta.html", contexto)
 
