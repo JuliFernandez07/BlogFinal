@@ -2,10 +2,13 @@ from django.shortcuts import render
 from AppBlog.forms import cargar_receta
 from AppBlog.models import receta
 import datetime
-from django.contrib.auth.decorators import login_required
+
+
 
 #Decorador por defecto
 from django.contrib.auth.decorators import login_required
+
+from AppUsuarios.models import avatar
 
 
 FECHA_ACTUAL = datetime.datetime.now()
@@ -13,17 +16,23 @@ FECHA_ACTUAL = datetime.datetime.now()
 
 
 def inicio(request):
-
+  
+  imagen_avatar = avatar.objects.filter(user=request.user.id)
+  
   if request.method == 'GET':
     todasLasRecetas = list(receta.objects.all())[::-1]
-
-  contexto = {'todasLasRecetas': todasLasRecetas}
+    
+    
+    contexto = {'todasLasRecetas': todasLasRecetas, "imagen":imagen_avatar[0].imagen.url} # ------->Cargar la imagen rompe el template 
 
   return render(request, "Inicio.html", contexto)
 
 
 @login_required
 def cargarReceta(request):
+
+  
+
   if request.method == 'POST':
 
     cargar_receta_form = cargar_receta(request.POST)
@@ -31,13 +40,14 @@ def cargarReceta(request):
     if cargar_receta_form.is_valid:
       print(cargar_receta_form)
       cargar_receta_cleaned = cargar_receta_form.cleaned_data
-
+  
+      imagen_avatar = avatar.objects.filter(user=request.user.id)
       nueva_receta = receta(
         fecha = f"{FECHA_ACTUAL.year}-{FECHA_ACTUAL.month}-{FECHA_ACTUAL.day}",
         nombre_receta = cargar_receta_cleaned["nombre_receta"],
         imagen = cargar_receta_cleaned["imagen"],
         receta = cargar_receta_cleaned["receta"],
-        autor = "Juli"
+        autor = request.user.username
       )
 
       nueva_receta.save()
@@ -47,14 +57,15 @@ def cargarReceta(request):
     cargar_receta_form = cargar_receta()
     recetaCargada = False
 
-  contexto = {"cargarRecetaForm": cargar_receta_form, "recetaCargada": recetaCargada}
+  contexto = {"cargarRecetaForm": cargar_receta_form, "recetaCargada": recetaCargada,}  
 
   return render (request, "cargarReceta.html", contexto)
 
-@login_required
+# @login_required
 def verReceta(request, receta_id):
+  imagen_avatar = avatar.objects.filter(user=request.user.id)
   verReceta = receta.objects.get(id=receta_id)
-  contexto = {"verReceta": verReceta}
+  contexto = {"verReceta": verReceta,} # "imagen":imagen_avatar[0].imagen.url}  ------->#Cargar la imagen rompe el template
 
   return render(request, "verReceta.html", contexto)
 

@@ -1,0 +1,19 @@
+{% extends "padre.html" %}
+{% load static %}
+
+{% block editarPerfil %}
+
+<form action="" method="POST">
+    {% csrf_token %}
+
+    <table>
+
+        {{miFormulario.as_table}}
+
+    </table>
+
+    <input type="submit", value="Editar">
+</form>
+
+
+{% endblock %}

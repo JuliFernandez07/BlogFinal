@@ -1,0 +1,7 @@
+*Arreglar el modificar password en la vista de editarUsuario (falla por poner contraseña corta)
+*En vista usuario hacer boton para editar perfil
+*Forzar a poner primer letra en Mayus por codigo
+*Revisar base de datos porq no aparecen usuarios...
+*Cargar la imagen del avatar rompe templates cuando queres verla sin loguear
+	(si logueas con admin y entras a home, funciona sin problema)
+*Editar datos no guarda cambios...
