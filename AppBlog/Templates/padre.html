@@ -24,16 +24,16 @@
                     <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
                         {% if not request.user.is_authenticated %}
                         <li class="nav-item"><a class="nav-link" href="{% url 'Login' %}">Login</a></li>
-                        <li class="nav-item"><a class="nav-link" href="{% url 'Register' %}">Register</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{% url 'signup' %}">Register</a></li>
                         {% endif %}
 
                         {% if request.user.is_authenticated %}
-                       
-                        <li class="nav-item"><a class="nav-link" href="{% url 'Logout' %}">Logout</a></li>
-                        <li class="nav-item"><a class="nav-link" href="{% url 'EditarUsuario' %}">{{user.username}}</a></li>
-                        <img src="{{imagen}}" width="5%">
                         <li class="nav-item"><a class="nav-link" href="{% url 'cargarReceta' %}">Sube tus Recetas</a></li>
-                        <li class="nav-item"><a class="nav-link active" aria-current="page" href="#">Blog</a></li>
+                        <img src="{{ imagen }}" width="5%">
+                        <li class="nav-item"><a class="nav-link" href="{% url 'EditarUsuario' %}">{{user.username}}</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{% url 'Mensajes' %}">Mensajes</a></li>
+                        <!-- <li class="nav-item"><a class="nav-link active" aria-current="page" href="#">Blog</a></li> -->
+                        <li class="nav-item"><a class="nav-link" href="{% url 'Logout' %}">Logout</a></li>
                         {% endif %}
                     </ul>
                 </div>
@@ -71,6 +71,12 @@
         {% endblock %}
 
         {% block editarPerfil %}
+        {% endblock %}
+
+        {% block editarAvatar %}
+        {% endblock %}
+
+        {% block messages %}
         {% endblock %}
         <!-- Footer-->
         <footer class="py-5 bg-dark">

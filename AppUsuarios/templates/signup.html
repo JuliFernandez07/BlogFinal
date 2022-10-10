@@ -12,7 +12,10 @@
 </head>
 
 <body>
+    &nbsp;
+
     {% if registerOK == False %}
+    <h1>{{ mensaje }}</h1>
     <form action="" method="POST">
         {% csrf_token %}
         {{form.as_p}}
@@ -23,7 +26,7 @@
     {% if registerOK == True %}
     <h1>{{ mensaje }}</h1>
     {% endif %}
-
+    &nbsp;
 </body>
 
 </html>

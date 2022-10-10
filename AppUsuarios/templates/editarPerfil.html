@@ -3,17 +3,37 @@
 
 {% block editarPerfil %}
 
-<form action="" method="POST">
-    {% csrf_token %}
+&nbsp;
+{% if editPerfil == False %}
+    <form action="" method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <table>
+            {{miFormulario.as_table}}
+        </table>
+        <input type="submit", value="Editar">
+    </form>
+    &nbsp;
+    <form action="{% url 'EditarAvatar' %}" method="GET">
+        <input type="submit" value="Editar avatar.">
+    </form>
+{% endif %}
 
-    <table>
+{% if editPerfil == True %}
+    <h1>Perfil modificado con éxito!</h1>
 
-        {{miFormulario.as_table}}
+    <form action="{% url 'Home' %}" method="GET">
+        <input type="submit" value="Regresar a Home.">
+    </form>
+    &nbsp;
+    <form action="{% url 'EditarUsuario' %}" method="GET">
+        <input type="submit" value="Editar usuario.">
+    </form>
+    &nbsp;
+    <form action="{% url 'EditarAvatar' %}" method="GET">
+        <input type="submit" value="Editar avatar.">
+    </form>
 
-    </table>
-
-    <input type="submit", value="Editar">
-</form>
-
+{% endif %}
+&nbsp;
 
 {% endblock %}

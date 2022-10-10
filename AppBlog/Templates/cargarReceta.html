@@ -1,9 +1,9 @@
 {% extends "padre.html" %}
 {% load static %}
 {% block cargarReceta %}
-
+&nbsp;
 {% if recetaCargada == False %}
-<form action="{% url 'cargarReceta' %}" method="POST">
+<form action="{% url 'cargarReceta' %}" method="POST" enctype="multipart/form-data">
     {% csrf_token %}
     <table>{{ cargarRecetaForm.as_table }}</table>
     <input type="submit" value="Enviar">
@@ -15,10 +15,10 @@
 <form action="{% url 'Home' %}" method="GET">
     <input type="submit" value="Regresar a Home.">
 </form>
-
+&nbsp;
 <form action="{% url 'cargarReceta' %}" method="GET">
     <input type="submit" value="Cargar otra receta.">
 </form>
 {% endif %}
-
+&nbsp;
 {% endblock %}

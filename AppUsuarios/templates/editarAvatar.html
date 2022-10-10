@@ -1,0 +1,31 @@
+{% extends "padre.html" %}
+{% load static %}
+
+{% block editarAvatar %}
+
+&nbsp;
+{% if editAvatar == False %}
+<form action="" method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    <table>
+        {{miFormulario.as_table}}
+    </table>
+    &nbsp;
+    <input type="submit", value="Editar">
+</form>
+{% endif %}
+
+{% if editAvatar == True %}
+    <h1>Perfil modificado con éxito!</h1>
+    &nbsp;
+    <form action="{% url 'Home' %}" method="GET">
+        <input type="submit" value="Regresar a Home.">
+    </form>
+    &nbsp;
+    <form action="{% url 'EditarUsuario' %}" method="GET">
+        <input type="submit" value="Editar usuario.">
+    </form>
+{% endif %}
+&nbsp;
+
+{% endblock %}

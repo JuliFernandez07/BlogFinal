@@ -7,7 +7,7 @@ from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.forms import AuthenticationForm
 
 # Create your views here.
-def register(request):
+def signup(request):
     if request.method == 'POST':
 
         form = RegisterForm(request.POST)
@@ -21,6 +21,7 @@ def register(request):
             contexto = {"mensaje": "Usuario Creado :)", "registerOK": registerOK}
         else:
             print("Ingrese al ELSE del IF form.is_valid")
+            form = RegisterForm()
             registerOK = False
             contexto = {"mensaje": "Error en el formulario", "registerOK": registerOK}
 
@@ -30,7 +31,7 @@ def register(request):
         registerOK = False
         contexto = {"form": form, "registerOK": registerOK }
 
-    return render(request, "register.html", contexto)
+    return render(request, "signup.html", contexto)
 
 
 
@@ -69,6 +70,7 @@ def login_request(request):
 
     return render(request,"login.html" , contexto)
 
+
 @login_required
 def logout_request(request):
     logout(request)
@@ -76,34 +78,93 @@ def logout_request(request):
 
     return redirect("Home")
 
+
 @login_required
 def editar_usuario(request):
 
     usuario = request.user
+    imagen_avatar = list(avatar.objects.filter(user=request.user.id))
 
-    for item in dir(usuario):
-        print(item)
-    # print(usuario.set_password("passwordnueva"))
+    if imagen_avatar != []:
+        imagen_avatar = imagen_avatar[0].imagen.url
+    else:
+        imagen_avatar = "/Media/Avatares/dummy-avatar.jpg"
 
     if request.method == "POST":
 
-        mi_formulario = edicionUsuarioForm(request.POST)
-        print(mi_formulario)
+        mi_formulario = edicionUsuarioForm(request.POST, request.FILES)
 
         if mi_formulario.is_valid():
 
             info = mi_formulario.cleaned_data
+            
             print(info)
 
+            usuario.username = info["username"]
+            usuario.first_name = info["first_name"]
+            usuario.last_name = info["last_name"]
             usuario.email = info["email"]
-            usuario.password1 = info["password1"]
-            usuario.password2 = info["password2"]
             usuario.save()
 
-            return render(request, "Inicio.html")
+            editPerfil = True
+
+        else:
+            editPerfil = False
+            # return render(request, "Inicio.html")
 
 
     else:
-        mi_formulario = edicionUsuarioForm(initial = {"email" : usuario.email})
+        initialValues = {
+                            "username": usuario.username,
+                            "first_name": usuario.first_name,
+                            "last_name": usuario.last_name,
+                            "email" : usuario.email
+                        }
 
-        return render (request, "editarPerfil.html", {"miFormulario": mi_formulario, "usuario": usuario})
+        mi_formulario = edicionUsuarioForm(initial = initialValues)
+        editPerfil = False
+
+    return render(request, "editarPerfil.html", {"miFormulario": mi_formulario, "usuario": usuario, "editPerfil": editPerfil, "imagen": imagen_avatar})
+
+
+
+
+@login_required
+def editar_avatar(request):
+
+    imagen_avatar = list(avatar.objects.filter(user=request.user.id))
+
+    if imagen_avatar and imagen_avatar != []:
+        imagen_avatar = imagen_avatar[0].imagen.url
+    else:
+        imagen_avatar = "/Media/Avatares/dummy-avatar.jpg"
+
+    usuario = request.user
+
+    try:
+        change_avatar = avatar.objects.get(user=request.user.id)
+        change_avatar.delete()
+
+    finally:
+
+        if request.method == "POST":
+
+            mi_formulario = formularioAvatar(request.POST, request.FILES)
+
+            if mi_formulario.is_valid():
+                u = User.objects.get(id=request.user.id)
+                info = mi_formulario.cleaned_data
+                nuevo_avatar = avatar(user=u, imagen=info['imagen']) 
+                nuevo_avatar.save()
+
+                editAvatar = True
+
+            else:
+                editAvatar = False
+                # return render(request, "Inicio.html")
+        else:
+
+            mi_formulario = formularioAvatar()
+            editAvatar = False
+
+        return render(request, "editarAvatar.html", {"miFormulario": mi_formulario, "usuario": usuario, "editAvatar": editAvatar, "imagen": imagen_avatar})

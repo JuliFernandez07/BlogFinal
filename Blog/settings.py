@@ -15,8 +15,8 @@ import os
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 BLOG_DIR = BASE_DIR / 'AppBlog/Templates'
-MENSAJES_DIR = BASE_DIR / 'AppMensajes/Templates'
-USUARIOS_DIR = BASE_DIR / 'App/Templates'
+MENSAJES_DIR = BASE_DIR / 'AppMensajes/templates'
+USUARIOS_DIR = BASE_DIR / 'AppUsuarios/templates'
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
@@ -29,8 +29,9 @@ DEBUG = True
 ALLOWED_HOSTS = ['*']
 
 # ---- IMAGENES-----
+MEDIA_ROOT = os.path.join(BASE_DIR, 'Media')
 MEDIA_URL = '/Media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'Media') 
+
 
 # Application definition
 
@@ -124,5 +125,4 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
 LOGIN_URL = 'login/'
