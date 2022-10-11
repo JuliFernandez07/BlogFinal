@@ -1,3 +1,6 @@
+{% extends "padre.html" %}
+{% load static %}
+{% block chat %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,6 +10,17 @@
     <title>Chat</title>
 </head>
 <body>
-    {{ mensaje }}
+    <h2>Intercambiar mensajes con {{ receptor }}!!!</h2>
+    <br>
+    &nbsp;
+    <a class="btn btn-primary" href="enviar/{{ receptor }}">Enviar mensaje</a>
+    &nbsp;
+    <a class="btn btn-primary" href="recibir/{{ receptor }}">Leer mensajes</a>
+    &nbsp;
+    <a class="btn btn-primary" href="{% url 'Mensajes' %}">Volver</a>
+    <br>
 </body>
+<br>
 </html>
+
+{% endblock %}

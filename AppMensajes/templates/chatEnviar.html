@@ -1,0 +1,38 @@
+{% extends "padre.html" %}
+{% load static %}
+{% block chatEnviar %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enviar mensaje</title>
+</head>
+<body>
+    {% if mensajeEnviado == False %}
+    <h2>Enviar mensaje a {{ receptor }}.</h2>
+    {% else %}
+    <h2>Mensaje enviado con éxito!</h2>
+    <h4>Podes enviar otro!</h4>
+    {% endif %}
+    &nbsp;
+    <form action="" method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <table>{{ enviar_mensaje_form.as_table }}</table>
+        &nbsp;
+        <button type="submit" class="btn btn-primary">Enviar</button>
+    </form>
+    <br>
+    <form action="{% url 'Chat' %}" method="POST">
+        {% csrf_token %}
+
+        <table>{{ volver_form.as_table }}</table>
+        &nbsp;
+        <button type="submit" class="btn btn-primary">Volver</button>
+    </form>
+    &nbsp;
+</body>
+</html>
+
+{% endblock %}

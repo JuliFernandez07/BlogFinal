@@ -1,0 +1,70 @@
+{% extends "padre.html" %}
+{% load static %}
+{% block chatRecibir %}
+<style>
+    table, th, td {
+      border: 1px solid black;
+      border-collapse: collapse;
+      padding: 10px;
+      border-spacing: 30px;
+    }
+</style>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Leer mensaje</title>
+</head>
+
+<h2>Mensajes con {{ receptor }}.</h2>
+<br>
+<form action="{% url 'Chat' %}" method="POST">
+    {% csrf_token %}
+    <table>{{ volver_form.as_table }}</table>
+    &nbsp;
+    <button type="submit" class="btn btn-primary">Volver</button>
+</form>
+<br>
+<body>
+    <table>
+        <tr>
+          <th>Emisor</th>
+          <th>Receptor</th>
+          <th>Mensaje</th>
+          <th>Fecha</th>
+          <th>Leido</th>
+        </tr>
+        {% for mensaje in todosLosMensajes %}
+        {% if usuario == mensaje.emisor %}
+        <tr style="color: blue;">
+        {% else %}
+        <tr style="color: red;">
+        {% endif %}
+          <td>{{ mensaje.emisor }}</td>
+          <td>{{ mensaje.receptor }}</td>
+          <td>{{ mensaje.cuerpo }}</td>
+          <td>{{ mensaje.fecha }}</td>
+          <td>{{ mensaje.leido }}</td>
+        </tr>
+        {% endfor %}
+      </table>
+   
+
+<!-- 
+    {% for mensaje in Enviados %}
+    {{ mensaje.fecha }} {{ mensaje.emisor }} {{ mensaje.receptor }} {{ mensaje.cuerpo }} {{ mensaje.leido }}
+    <br>
+    {% endfor %}
+
+    <br>
+
+    {% for mensaje in Recibidos %}
+    {{ mensaje.fecha }} {{ mensaje.emisor }} {{ mensaje.receptor }} {{ mensaje.cuerpo }} {{ mensaje.leido }}
+    <br>
+    {% endfor %} -->
+</body>
+</html>
+
+{% endblock %}

@@ -11,28 +11,21 @@
 </head>
 <body>
 
-    <form action="chat/">
-        <input list="usuarios" name="receptor">
-        <datalist id="usuarios">
+    <form action="{% url 'Chat' %}" method="POST">
+        {% csrf_token %}
+        <h2>Con quien desea intercambiar mensajes?</h2>
+        <br>
+        <select name="receptor">
         {% for item in usuarios %}
         {% if item.username != logueado %}
-        <option value="{{ item.username }}"></option>
+        <option value ="{{ item.username }}">{{ item.username }}</option>
         {% endif %}
         {% endfor %}
-        </datalist>
-        <input type="submit">
+        </select> 
+        <button type="submit" class="btn btn-primary">Enviar</button>
     </form>
-
-
-
-<!-- 
-    <select name="example">
-    {% for item in usuarios %}
-        <option value="{{ item }}">{{ item }}</option>
-    {% endfor %}
-    </select> -->
-    <!-- <input type="text" name="other"> -->
-    
+        
+    &nbsp;
 
 </body>
 </html>

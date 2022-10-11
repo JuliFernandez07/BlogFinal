@@ -9,6 +9,18 @@ from AppUsuarios.models import avatar
 
 FECHA_ACTUAL = datetime.datetime.now()
 
+def about(request):
+
+  imagen_avatar = list(avatar.objects.filter(user=request.user.id))
+  
+  if imagen_avatar != []:
+    imagen_avatar = imagen_avatar[0].imagen.url
+  else:
+    imagen_avatar = "/Media/Avatares/dummy-avatar.jpg"
+
+  contexto = {"imagen": imagen_avatar}
+
+  return render(request, "about.html", contexto)
 
 def inicio(request):
   
@@ -30,7 +42,6 @@ def inicio(request):
 def cargarReceta(request):
     
   imagen_avatar = list(avatar.objects.filter(user=request.user.id))
-  print(imagen_avatar)
   
   if imagen_avatar != []:
     imagen_avatar = imagen_avatar[0].imagen.url
