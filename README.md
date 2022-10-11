@@ -2,6 +2,7 @@
 
 <em>Sobre el proyecto:</em>
 
+- Se creo el usuario "Franco", contraseña "proyectoCoder" para realizar las pruebas.
 - Cuenta con 3 apps, blog, usuarios y mensajeria.
 - Barra de navegacion:
   - Login, permite loguear un usuario registrado.
