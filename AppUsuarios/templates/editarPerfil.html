@@ -13,6 +13,10 @@
         <input type="submit", value="Editar">
     </form>
     &nbsp;
+    <form action="{% url 'EditarPassword' %}" method="GET">
+        <input type="submit" value="Resetear contraseña.">
+    </form>
+    &nbsp;
     <form action="{% url 'EditarAvatar' %}" method="GET">
         <input type="submit" value="Editar avatar.">
     </form>

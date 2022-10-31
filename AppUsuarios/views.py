@@ -3,8 +3,9 @@ from django.shortcuts import render, redirect
 from AppUsuarios.forms import *
 from AppUsuarios.models import *
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth import login, logout, authenticate
+from django.contrib.auth import login, logout, authenticate, update_session_auth_hash
 from django.contrib.auth.forms import AuthenticationForm
+
 
 # Create your views here.
 def signup(request):
@@ -127,6 +128,55 @@ def editar_usuario(request):
     return render(request, "editarPerfil.html", {"miFormulario": mi_formulario, "usuario": usuario, "editPerfil": editPerfil, "imagen": imagen_avatar})
 
 
+@login_required
+def editar_password(request):
+    usuario = request.user
+    imagen_avatar = list(avatar.objects.filter(user=request.user.id))
+
+    if imagen_avatar != []:
+        imagen_avatar = imagen_avatar[0].imagen.url
+    else:
+        imagen_avatar = "/Media/Avatares/dummy-avatar.jpg"
+
+    if request.method == 'GET':
+        editPassword = False
+        contexto = {"usuario": usuario, "editPassword": editPassword, "imagen": imagen_avatar}
+
+    if request.method == 'POST':
+        old_password = request.POST.get("q_Old_Password")
+        new_password = request.POST.get("q_new_Password")
+        confirmed_new_password = request.POST.get("q_confirm_new_Password")
+
+        if old_password and new_password and confirmed_new_password:
+
+            user = User.objects.get(username= request.user.username)
+
+            if user.check_password(old_password):
+
+                contexto = {"mensaje": "La contraseña actual es correcta.", "imagen": imagen_avatar}
+                
+                if new_password == confirmed_new_password:
+
+                    user.set_password(new_password)
+                    user.save()
+                    update_session_auth_hash(request, user)
+                    editPassword = True
+                    contexto = {"mensaje": "Contraseña modificada con éxito!", "editPassword": editPassword, "imagen": imagen_avatar}
+
+                else:
+                    editPassword = True
+                    contexto = {"mensaje": "La nueva contraseña y su confirmación con coinciden,", "editPassword": editPassword, "imagen": imagen_avatar}
+
+            else:
+                # return redirect('dashboard_namespace:home')
+                editPassword = True
+                contexto = {"mensaje": "La contraseña actual es incorrecta.", "editPassword": editPassword, "imagen": imagen_avatar}
+
+        else:
+            editPassword = True
+            contexto = {"mensaje": "Todos los campos deben ser completados!", "editPassword": editPassword, "imagen": imagen_avatar}
+
+    return render(request, "editarPassword.html", contexto)
 
 
 @login_required

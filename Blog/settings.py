@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     "AppBlog",
     "AppMensajes",
     "AppUsuarios",
+    "ckeditor"
 ]
 
 MIDDLEWARE = [

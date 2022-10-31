@@ -3,6 +3,7 @@ from unittest.util import _MAX_LENGTH
 from django.db import models
 from django.contrib.auth.models import User
 from django.db.models.fields.files import ImageField
+from ckeditor.fields import RichTextField
 
 class receta(models.Model):
     fecha = models.DateField()

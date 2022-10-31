@@ -2,6 +2,7 @@ from django.shortcuts import render
 from AppBlog.forms import cargar_receta
 from AppBlog.models import receta
 import datetime
+from django.conf import settings
 
 #Decorador por defecto
 from django.contrib.auth.decorators import login_required
@@ -22,6 +23,7 @@ def about(request):
 
   return render(request, "about.html", contexto)
 
+
 def inicio(request):
   
   imagen_avatar = list(avatar.objects.filter(user=request.user.id))
@@ -36,6 +38,7 @@ def inicio(request):
     contexto = {'todasLasRecetas': todasLasRecetas, "imagen": "/Media/Avatares/dummy-avatar.jpg"}
 
   return render(request, "Inicio.html", contexto)
+
 
 
 @login_required
