@@ -5,7 +5,8 @@
 {% if recetaCargada == False %}
 <form action="{% url 'cargarReceta' %}" method="POST" enctype="multipart/form-data">
     {% csrf_token %}
-    <table>{{ cargarRecetaForm.as_table }}</table>
+    {{ cargarRecetaForm.media }}
+    {{ cargarRecetaForm.as_p }}
     <input type="submit" value="Enviar">
 </form>
 {% endif %}

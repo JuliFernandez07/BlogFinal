@@ -64,7 +64,8 @@ def cargarReceta(request):
         nombre_receta = cargar_receta_cleaned["nombre_receta"],
         imagen = cargar_receta_cleaned["imagen"],
         receta = cargar_receta_cleaned["receta"],
-        autor = f"{request.user} ({request.user.first_name} {request.user.last_name})"
+        autor_usuario = f"{request.user}",
+        autor_nombre = f"({request.user.first_name} {request.user.last_name})"
       )
 
       nueva_receta.save()
@@ -79,17 +80,95 @@ def cargarReceta(request):
   return render(request, "cargarReceta.html", contexto)
 
 
-
-# @login_required
 def verReceta(request, receta_id):
 
   imagen_avatar = list(avatar.objects.filter(user=request.user.id))
   verReceta = receta.objects.get(id=receta_id)
+  usuario = request.user
 
   if imagen_avatar != []:
-    contexto = {"verReceta": verReceta, "imagen":imagen_avatar[0].imagen.url}  #-------> Cargar la imagen rompe el template
+    contexto = {"usuario": str(usuario), "verReceta": verReceta, "imagen":imagen_avatar[0].imagen.url}  #-------> Cargar la imagen rompe el template
 
   else:
-    contexto = {"verReceta": verReceta, "imagen": "/Media/Avatares/dummy-avatar.jpg"}
+    contexto = {"usuario": str(usuario), "verReceta": verReceta, "imagen": "/Media/Avatares/dummy-avatar.jpg"}
 
   return render(request, "verReceta.html", contexto)
+
+
+@login_required
+def editarReceta(request, receta_id):
+
+  imagen_avatar = list(avatar.objects.filter(user=request.user.id))
+  contexto = {}
+
+  if imagen_avatar != []:
+    contexto.update(imagen = imagen_avatar[0].imagen.url)
+
+  else:
+    contexto.update(imagen = "/Media/Avatares/dummy-avatar.jpg")
+
+
+  if request.method == 'GET':
+    print('entre a la funcion editarReceta GET')
+
+    bla = receta.objects.get(id=receta_id)
+    contexto.update(receta_id=receta_id)
+    contexto.update(receta = bla)
+    contexto.update(editarReceta = False)
+
+    initialValues = {
+                      "nombre_receta": bla.nombre_receta,
+                      "descripcion_receta": bla.descripcion_receta,
+                      "receta": bla.receta,
+                      "imagen" : bla.imagen
+
+                  }
+
+    mi_formulario = cargar_receta(initial=initialValues)
+
+    contexto.update(miFormulario=mi_formulario)
+    contexto.update(receta_id=receta_id)
+
+  return render(request, "editarReceta.html", contexto)
+
+
+def editadaReceta(request):
+
+  imagen_avatar = list(avatar.objects.filter(user=request.user.id))
+  contexto = {}
+
+  if imagen_avatar != []:
+    contexto.update(imagen = imagen_avatar[0].imagen.url)
+
+  else:
+    contexto.update(imagen = "/Media/Avatares/dummy-avatar.jpg")
+
+  if request.method == 'POST':
+
+    receta_id = request.POST['receta_id']
+    receta_a_editar = receta.objects.get(id=receta_id)
+    
+    mi_formulario = cargar_receta(request.POST, request.FILES)
+    print(mi_formulario)
+    mi_formulario = mi_formulario.cleaned_data
+    print(mi_formulario)
+    
+    receta_a_editar.nombre_receta = mi_formulario['nombre_receta']
+    receta_a_editar.descripcion_receta = mi_formulario['descripcion_receta']
+    receta_a_editar.receta = mi_formulario['receta']
+
+    if mi_formulario['imagen'] != (None or False):
+      receta_a_editar.imagen = mi_formulario['imagen']      
+    else:
+      receta_a_editar.imagen = 'Recetas/dummy.jpg'
+    
+    receta_a_editar.save()
+    contexto.update(mensaje = 'Receta actualizada!!!')
+    contexto.update(editadaReceta = True)
+    contexto.update(receta_id = receta_id)
+
+  else:
+    contexto.update(mensaje = 'Ocurrio algun error, no se actualizo la receta.')
+    contexto.update(editadaReceta = False)
+
+  return render(request, "editadaReceta.html", contexto)

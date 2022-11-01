@@ -1,0 +1,21 @@
+{% extends "padre.html" %}
+{% load static %}
+{% block editarReceta %}
+
+<form action="{% url 'editadaReceta' %}" method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ miFormulario.media }}
+    {{ miFormulario.as_p }}
+    <input type='hidden' name='receta_id' value="{{receta_id}}">
+    <input type="submit" value="Actualizar">
+</form>
+
+&nbsp;
+
+<form action="{% url 'verReceta' receta_id %}" method="GET">
+    <input type="submit" value="Regresar">
+</form>
+
+&nbsp;
+
+{% endblock %}

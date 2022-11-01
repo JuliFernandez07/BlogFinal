@@ -25,8 +25,6 @@ class edicionUsuarioForm(forms.Form):
     first_name = forms.CharField(label='Nombre')
     last_name = forms.CharField(label='Apellido')
     email = forms.EmailField(label='Email')
-    # password1 = forms.CharField(label='Ingrese la contraseña', widget=forms.PasswordInput)
-    # password2 = forms.CharField(label='Repita la contraseña', widget=forms.PasswordInput)
 
     class Meta:
         model = User

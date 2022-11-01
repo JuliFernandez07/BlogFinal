@@ -2,20 +2,41 @@
 {% load static %}
 {% block verReceta %}
 
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <style>
+    </style>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="Ver Receta" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
 </head>
 <body>
-    <h1>Receta subida por: {{ verReceta.autor}}</h1>
-    <p>{{ verReceta.descripcion_receta }}</p>
-    <p>{{ verReceta.receta }}</p>
-    
+    &nbsp;
+    <h1>{{ verReceta.nombre_receta }}</h1>
+    &nbsp;
+    <h4>Descripcion: {{ verReceta.descripcion_receta }}</h4>
+    &nbsp;
+    <div style="max-width:80%">{{ verReceta.receta | safe }}</div>
+    &nbsp;
+    <h2>Receta subida por: {{ verReceta.autor_usuario }} {{ verReceta.autor_nombre }}</h2>
+    &nbsp;
+    {% if usuario == verReceta.autor_usuario %}
+    <form action="{% url 'editarReceta'  verReceta.id %}" method="GET">
+        <input type="submit" value="Editar Receta">
+    </form>
+    {% endif %}
 </body>
+
 </html>
+
+&nbsp;
+<form action="{% url 'Home' %}" method="GET">
+    <input type="submit" value="Volver">
+</form>
+&nbsp;
 
 {% endblock %}
