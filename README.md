@@ -33,10 +33,8 @@ Durante toda la creacion del proyecto, nos juntamos via discord para trabajar de
       
 <em>Limitantes/Oportunidades de mejora:</em>
 
-- Posibilidad de editar las recetas cargadas.
 - Eliminacion de fotos al eliminar usuarios/recetas/avatar.
 - Eliminar conversaciones
 - Ver descripcion de los modelos desde el admin.
 - Poder haber tenido mas tiempo para jugar con HTML/CSS/Bootstrap y mejorar la estetica de todo el Blog.
-- Modificar/resetear el password de usuario desde el perfil (desde admin se puede).
 - Casos de prueba documentados.
