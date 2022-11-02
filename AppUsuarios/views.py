@@ -24,7 +24,7 @@ def signup(request):
             print("Ingrese al ELSE del IF form.is_valid")
             form = RegisterForm()
             registerOK = False
-            contexto = {"mensaje": "Error en el formulario", "registerOK": registerOK}
+            contexto = {"mensaje": "Error en el formulario", "registerOK": registerOK, "form":form}
 
     else:
         #form = UserCreationForm()       
@@ -165,7 +165,7 @@ def editar_password(request):
 
                 else:
                     editPassword = True
-                    contexto = {"mensaje": "La nueva contraseña y su confirmación con coinciden,", "editPassword": editPassword, "imagen": imagen_avatar}
+                    contexto = {"mensaje": "La nueva contraseña y su confirmación no coinciden", "editPassword": editPassword, "imagen": imagen_avatar}
 
             else:
                 # return redirect('dashboard_namespace:home')

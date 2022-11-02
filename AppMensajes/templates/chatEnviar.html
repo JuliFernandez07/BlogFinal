@@ -19,7 +19,8 @@
     &nbsp;
     <form action="" method="POST" enctype="multipart/form-data">
         {% csrf_token %}
-        <table>{{ enviar_mensaje_form.as_table }}</table>
+        {{ enviar_mensaje_form.media }}
+        {{ enviar_mensaje_form.as_p }}
         &nbsp;
         <button type="submit" class="btn btn-primary">Enviar</button>
     </form>
